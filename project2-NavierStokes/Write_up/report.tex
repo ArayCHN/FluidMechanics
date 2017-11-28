@@ -174,43 +174,42 @@ This yields
 \begin{align}
 f(y) = e^{-\sqrt{500i/\nu}y} \label{eq:fy}
 \end{align}
-
-Finally this yields
+Thus we have
 \begin{align}
-u = Re[e^{-\sqrt{500i/\nu}y + i500t}], v = 0
+u = Re[e^{-\sqrt{500i/\nu}y + i500t}], v = 0 \label{eq:last}
+\end{align}
+
+Plugging in all values and simplify everything in \ref{eq:last} and we obtain
+\begin{align}
+u = e^{-3.94y}cos(500t - 3.94y), v = 0 \label{eq:wave}
 \end{align}
 
 \section{Part (b). Non-dimensionalize the Result}
 In this section we want to find two values, $x_0$ and $v_0$ that we can use to non-dimensionalize the final answer. These values should be characteristic velocity and length for this problem.
 
-%For this problem, velocity and length scale are first chosen as the maximum velocity and amplitude of the plate, respectively. However, the amplitude of the plate's oscillating motion is so small that the scale of y looks vary large. Therefore, I also tried a different choice, namely the distance that a fixed point on the plate travels in 1 second.
-In my solution, velocity and length scale are chosen as the maximum velocity and amplitude of the plate, respectively. This is because the multiple of these two values are special to the system, and can be perceived intuitively. The scaled velocity shows how fast the fluid is moving compared to the plate. The height shows the distance compared to the motion range of the plate.
+For velocity, the normalization term is chosen as the maximum velocity of the plate.
 
-Since the plate moves in a harmonic oscillation manner $x = x_0 sin(\omega t+\phi_1)$ with velocity $v = v_0 cos(\omega t+\phi_2)$, we can easily obtain the expression for $x$:
+Note that the form of our solution \ref{eq:wave} looks like a wave that is propagating with time, except that the amplitude of the wave is shrinking with time. The general form of a harmonic wave is
 \begin{align}
-x = 0.002sin(500t)
+y = A cos(\omega t - \frac{2\pi}{\lambda}x)\label{eq:generalWave}
 \end{align}
+Comparing this with \ref{eq:wave}, the wave length is determined to be $1.6$ m. Therefore, we can choose this wave length as our normalization factor for height, namely $1.6$ m.
 
-%\subsection{Method I}
-As such we have $v_0 = 1$ m/s and $x_0 = 0.002 $m. Thus the scaled y-value turns into the multiple of the amplitude and the scaled x-value turns into the multiple of the plate's maximum velocity.
+The scaled velocity shows how fast the fluid is moving compared to the plate. The height shows the distance compared to the wave length of the wave that is propagating from the plate to the farther.
+
+As such we have $v_0 = 1$ m/s and $x_0 = 1.6 $m. Thus the scaled y-value turns into the multiple of the amplitude and the scaled x-value turns into the multiple of the plate's maximum velocity.
 
 Non-dimensionalize our original equation with the two scales, namely $\hat{u} = \frac{u}{v_0}$ and $\hat{y} = \frac{y}{x_0}$,
 and we obtain
 \begin{align}
-\hat{u} = Re[e^{-\sqrt{i/(500\nu)}\hat{y} + i500t}]
+\hat{u} = e^{-2\pi \hat{y}}cos(500t-2\pi\hat{y})
 \end{align}
 where $\hat{u}$ stands for the non-dimensionalized velocity and $\hat{y}$ stands for the non-dimensionalized height.
-%\subsection{Method II}
-%For the second method, the distance that a fixed point travels in 1 second is $\frac{8}{\pi} $m, which is around $x'_0 = 2.55$m.
-%
-%Non-dimensionalize our original equation with the two scales, namely $\hat{u} = \frac{u}{v_0}$ and $\hat{y} = \frac{y}{x'_0}$,
-%and we obtain
-%\begin{align}
-%\hat{u} = Re[e^{-\sqrt{i/\nu}\hat{y} + i500t}]
-%\end{align}
 
 \section{Part (c). Plot Velocity versus Height}
-In this section, we plot the non-dimensional velocity versus the height in the fluid.
+In this section, we plot the non-dimensional velocity versus the height in the fluid. The y-axis is the non-dimensional height and the x-axis is the non-dimensional velocity.
+
+Note that because the time period for the wave is 0.0126 s, although we are asked to examine the fluid motion within 4 s, we may as well just examine everything within the first 0.0126 s.
 
   \begin{figure}[H]
     \centering
@@ -218,7 +217,7 @@ In this section, we plot the non-dimensional velocity versus the height in the f
     {
     \includegraphics[width=0.5\paperwidth]{images/00.jpg}
     }
-    \caption{The Scaled Velocity Profile at t=0.} \label{fig:00}
+    \caption{The Scaled Velocity Profile at t=0} \label{fig:00}
   \end{figure}
   
   \begin{figure}[H]
@@ -267,7 +266,10 @@ In this section, we plot the non-dimensional velocity versus the height in the f
     \caption{All plots combined} \label{fig:all}
   \end{figure}
   
-  From these plots we can see some features that reflect the physical significances of it. The magnitude of the velocity is the same as the velocity of plate due to no-slip boundary condition, and is often relatively high when $y$ is \textbf{relatively} small. $y$ takes the scale of hundreds because the plate is oscillating very fast and the amplitude is small. In this case the oscillation can spread to far away, till $y = 700$ before it fades away. However, in this specific setting, the velocity of the plate goes to zero well before 2m away, meaning that the viscosity of the fluid has a significant damping effect placed on it. Fluid very far away will not be affected by the oscillation of the plate and will remain still. Also, the velocity profile evolves in a periodic pattern, which is obvious from our equation. This is also due to the fact that the plate is moving periodically, and the viscosity of the fluid ensures that previous motion of fluid particles, compared to the motion of the plate, exerts smaller influence on the current motion of fluid particles.
+  From these plots we can see some features that reflect the physical significances of it. The magnitude of the velocity is the same as the velocity of plate due to no-slip boundary condition(so the maximum nondimensional velocity is 1), and is often relatively high when $y$ is \textbf{relatively} small. $y$ takes the scale of $10^0$ because the damping effect of the fluid is significant and the wave form propagating from the plate goes to zero very quickly, before one wave length. Fluid very far away will not be affected by the oscillation of the plate and will remain still. Also, the velocity profile evolves in a periodic pattern, which is obvious from our equation. This is also due to the fact that the plate is moving periodically, and that inertia exerts smaller influence on the motion of fluid particles than viscosity, so that the motion of the plate plays a key role in moving fluid particles along.
+
+\section{Explanation for the Code}
+The code for plotting is attached in appendix. The basic idea is to generate a function handle that calculates the velocity at a given time and height. Then we pass in the time, and the program generates a series of height from 0 to 1.25(undimensional height, equivalent to 2 m). Then the code will plot all values for this series of height at this time, and draw a graph accordingly.
 
 \clearpage
 \appendix
